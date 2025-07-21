@@ -1,6 +1,7 @@
-import pandas as pd
 import streamlit as st
 import os
+import glob
+import pandas as pd  # コメントアウトされていたので有効化
 
 # 結果保持用
 final_result = pd.DataFrame()
@@ -23,7 +24,12 @@ with st.form("input_form"):
 
 if submitted:
     try:
-        file_path = './data/購買オーダ_SL_20250525.csv'
+        # CSVファイルを1件取得
+        csv_files = glob.glob('./data/*.csv')
+        if not csv_files:
+            raise FileNotFoundError("CSVファイルが見つかりません。./data フォルダを確認してください。")
+        file_path = csv_files[0]  # 最初のCSVファイルを使用
+
         df = pd.read_csv(file_path, encoding='cp932', sep=',')
 
         # クォート・空白削除
